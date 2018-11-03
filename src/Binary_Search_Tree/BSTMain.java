@@ -21,7 +21,7 @@ public class BSTMain {
         myBST.insert(2);
         myBST.insert(1);
         myBST.insert(5);
-        
+        myBST.printInOrden();
         System.out.println("The smallest data is " + myBST.findMin());
         System.out.println("The bigest data is " + myBST.findMax());
         

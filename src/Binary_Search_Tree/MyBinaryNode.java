@@ -10,18 +10,16 @@ package Binary_Search_Tree;
  * @author jccas
  */
 public class MyBinaryNode<T> {
-    
+
     private T element;
     private MyBinaryNode<T> left;
     private MyBinaryNode<T> right;
-    
-    public MyBinaryNode(T element)
-    {
+
+    public MyBinaryNode(T element) {
         this(element, null, null);
     }
-    
-    public MyBinaryNode(T element, MyBinaryNode<T> left, MyBinaryNode<T> right)
-    {
+
+    public MyBinaryNode(T element, MyBinaryNode<T> left, MyBinaryNode<T> right) {
         this.element = element;
         this.left = left;
         this.right = right;
@@ -50,7 +48,5 @@ public class MyBinaryNode<T> {
     public void setRight(MyBinaryNode<T> right) {
         this.right = right;
     }
-    
-    
-    
+
 }

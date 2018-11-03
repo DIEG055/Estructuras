@@ -30,26 +30,22 @@ public class MyBinarySearchTree<T extends Comparable> {
         return contains(element, root);
     }
 
-    public T findMin() {
-        if (isEmpty()) {
-            System.out.println("Tree empty");
-            return null;
-        } else {
-            return findMin(root).getElement();
-        }
-    }
-
-    public T findMax() {
-        if (isEmpty()) {
-            System.out.println("Tree empty");
-            return null;
-        } else {
-            return findMax(root).getElement();
-        }
-    }
-
     public void insert(T element) {
         root = insert(element, root);
+    }
+
+    private MyBinaryNode<T> insert(T element, MyBinaryNode<T> node) {
+        if (node == null) {
+            return new MyBinaryNode<>(element, null, null);
+        }
+        int compareResult = element.compareTo(node.getElement());
+        if (compareResult < 0) {
+            node.setLeft(insert(element, node.getLeft()));
+        } else if (compareResult > 0) {
+            node.setRight(insert(element, node.getRight()));
+        }
+
+        return node;
     }
 
     private boolean contains(T element, MyBinaryNode<T> node) {
@@ -65,6 +61,24 @@ public class MyBinarySearchTree<T extends Comparable> {
             return contains(element, node.getRight());
         } else {
             return true;
+        }
+    }
+
+    public T findMin() {
+        if (isEmpty()) {
+            System.out.println("Tree empty");
+            return null;
+        } else {
+            return findMin(root).getElement();
+        }
+    }
+
+    public T findMax() {
+        if (isEmpty()) {
+            System.out.println("Tree empty");
+            return null;
+        } else {
+            return findMax(root).getElement();
         }
     }
 
@@ -84,24 +98,8 @@ public class MyBinarySearchTree<T extends Comparable> {
         } else if (node.getRight() == null) {
             return node;
         } else {
-            return findMin(node.getRight());
+            return findMax(node.getRight());
         }
-    }
-
-    private MyBinaryNode<T> insert(T element, MyBinaryNode<T> node) {
-        if (node == null) {
-            return new MyBinaryNode<>(element, null, null);
-        }
-
-        int compareResult = element.compareTo(node.getElement());
-
-        if (compareResult < 0) {
-            node.setLeft(insert(element, node.getLeft()));
-        } else if (compareResult > 0) {
-            node.setRight(insert(element, node.getRight()));
-        }
-
-        return node;
     }
 
     public void remove(T elem) {
@@ -139,5 +137,20 @@ public class MyBinarySearchTree<T extends Comparable> {
         }
         return n;
     }
+//imprimir en Inorden
 
+    public void printInOrden() {
+        System.out.print("InOrden: ");
+        printInOrden(this.root);
+        System.out.println("");
+    }
+
+    private void printInOrden(MyBinaryNode<T> n) {
+        if (n != null) {
+            printInOrden(n.getLeft());
+            System.out.print(n.getElement() + " ");
+            printInOrden(n.getRight());
+        }
+
+    }
 }
