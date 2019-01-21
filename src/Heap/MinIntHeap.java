@@ -14,14 +14,14 @@ import java.util.Arrays;
  */
 public class MinIntHeap {
 
-    private int capacity;
-    private int size;
+    int size;
+    int capacity;
     int[] items;
 
-    public MinIntHeap(int initialCapacity) {
-        this.capacity = initialCapacity;
+    public MinIntHeap(int inicialcapacity) {
+        this.capacity = inicialcapacity;
         this.size = 0;
-        this.items = new int[initialCapacity];
+        this.items = new int[inicialcapacity];
     }
 
     private void ensureCapacity() {
@@ -42,79 +42,70 @@ public class MinIntHeap {
         return (childIndex - 1) / 2;
     }
 
-    //para verificar si tiene hijos se mira se usa el indice 
-    //del padre y se llama a la funcion getchild, luego se mira
-    //si el indice esta dentro del tamano(cada vez que se agrega
-    //algo incrementa) del array
-    public int getChildLeft(int parentIndex) {
+    private int getLeftChildElement(int parentIndex) {
         return this.items[getLeftChildIndex(parentIndex)];
     }
 
-    public int getChildRight(int parentIndex) {
+    private int getrightChildElement(int parentIndex) {
         return this.items[getRightChildIndex(parentIndex)];
     }
 
-    public int getParent(int ChildIndex) {
-        return this.items[getParentIndex(ChildIndex)];
+    private int getParentElement(int childIndex) {
+        return this.items[getParentIndex(childIndex)];
     }
 
-    public void add(int item) {
+    public void add(int element) {
         ensureCapacity();
-        this.items[size] = item;
-        size++;
-        heapUp();
+        this.items[this.size] = element;
+        this.size++;
+        moveUp();
     }
 
-    public int delete() {
-        if (this.size == 0) {
-            throw new IllegalStateException();
-        } else {
-            int item = this.items[0];
-            this.items[0] = this.items[size - 1];
-            size--;
-            heapDown();
-            return item;
+    private boolean hasParent(int childIndex) {
+        return getParentIndex(childIndex) >= 0;
+    }
+
+    private boolean hasLeftChild(int parentIndex) {
+        return getLeftChildIndex(parentIndex) < this.size;
+    }
+
+    private boolean hasRightChild(int parentIndex) {
+        return getRightChildIndex(parentIndex) < this.size;
+    }
+
+    private void moveUp() {
+//       al iniciar indexTemp siempre hara referencia al ultimo elemento incluido
+        int indexTemp = size - 1;
+        while (hasParent(indexTemp) && getParentElement(indexTemp) > this.items[indexTemp]) {
+            int temp = this.items[getParentIndex(indexTemp)];
+            this.items[getParentIndex(indexTemp)] = this.items[indexTemp];
+            this.items[indexTemp] = temp;
+            indexTemp = getParentIndex(indexTemp);
         }
     }
 
-    private boolean hasparent(int childIndex) {
-        return getParent(childIndex) >= 0;
-    }
-
-    private boolean hasChildLeft(int parentIndex) {
-        return getChildLeft(parentIndex) < (size);
-    }
-
-    private boolean hasChildRight(int parentIndex) {
-        return getChildRight(parentIndex) < (size);
-    }
-
-    public void heapUp() {
-        int temp = this.size - 1;
-        while (hasparent(temp) && getParent(temp) > this.items[temp]) {
-            int aux = getParent(temp);
-            this.items[getParentIndex(temp)] = this.items[temp];
-            this.items[temp] = aux;
-            temp = getParentIndex(temp);
-        }
-
-    }
-
-    public void heapDown() {
-        int temp = 0;
-        while (hasChildLeft(temp)) {
-            int smallerChild = getLeftChildIndex(temp);
-            if (hasChildRight(temp) && getChildRight(temp) < getChildLeft(temp)) {
-                smallerChild = getChildRight(temp);
+    public void deleteMin() {
+        int iterable = 0;
+        this.items[iterable] = this.items[size - 1];
+        this.items[size - 1] = 0;
+        this.size--;
+        boolean hasChildren = hasLeftChild(iterable) && hasRightChild(iterable);
+        boolean leftComparation = this.items[iterable] > getLeftChildElement(iterable);
+        boolean rightComparation = this.items[iterable] > getrightChildElement(iterable);
+        while (hasChildren && (leftComparation || rightComparation)) {
+            if (getLeftChildElement(iterable) < getrightChildElement(iterable)) {
+                int temp = this.items[iterable];
+                this.items[iterable] = this.items[getLeftChildIndex(iterable)];
+                this.items[getLeftChildIndex(iterable)] = temp;
+                iterable = getLeftChildIndex(iterable);
+            } else {
+                int temp = this.items[iterable];
+                this.items[iterable] = this.items[getRightChildIndex(iterable)];
+                this.items[getRightChildIndex(iterable)] = temp;
+                iterable = getRightChildIndex(iterable);
             }
-            if(this.items[smallerChild] < this.items[temp]){
-                int aux= this.items[temp];
-                this.items[temp]=this.items[smallerChild];
-                this.items[smallerChild]=aux;
-            }else{
-                break;
-            }
-            temp= smallerChild;
+            hasChildren = hasLeftChild(iterable) && hasRightChild(iterable);
         }
     }
+
 }

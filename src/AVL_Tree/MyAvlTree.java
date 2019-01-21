@@ -2,6 +2,7 @@ package AVL_Tree;
 
 /**
  *
+ *
  * @author Juan Diego Medina
  */
 public class MyAvlTree<T extends Comparable> {
@@ -95,35 +96,54 @@ public class MyAvlTree<T extends Comparable> {
         // return node;
     }
 
-    //caso1
+    //CASO1
+    //se realiza una rotacion simple con el nodo izquierdo
+    //del nodo alpha, el hijo k1 pasa a ser la raiz, alpha 
+    //pasa a ser hijo derecho
     private MyAvlNode<T> rightRot(MyAvlNode<T> alpha) {
         MyAvlNode<T> k1 = alpha.getLeft();
         alpha.setLeft(k1.getRight());
         k1.setRight(alpha);
+        //asignamos la profundidad despues de rotar, 
+        //la mayor profundidad de sus dos hijos + 1.
+        alpha.setHeight(Math.max(height(alpha.getLeft()), height(alpha.getRight())) + 1);
+        k1.setHeight(Math.max(height(k1.getLeft()), height(k1.getRight())) + 1);
         return k1;
     }
 
-    //caso4
+    //CASO4
+    //se realiza una rotacion simple con el nodo derecho
+    //del nodo alpha, el hijo k1 pasa a ser la raiz, alpha
+    // pasa a ser hijo izquierdo
     private MyAvlNode<T> leftRot(MyAvlNode<T> alpha) {
         MyAvlNode<T> k1 = alpha.getRight();
         alpha.setRight(k1.getLeft());
         k1.setLeft(alpha);
+        //asignamos la profundidad despues de rotar
+        //la mayor profundidad de sus dos hijos +1.
+        alpha.setHeight(Math.max(height(alpha.getLeft()), height(alpha.getRight())) + 1);
+        k1.setHeight(Math.max(height(k1.getLeft()), height(k1.getRight())) + 1);
         return k1;
     }
 
-    //caso2
-    private MyAvlNode<T> leftRightRot(MyAvlNode<T> k2) {
-        MyAvlNode<T> k1 = k2.getLeft();
-        k1 = leftRot(k1);
-        return rightRot(k2);
-
+    //CASO2
+    //se realiza una rotacion doble:
+    //      *rotacion a la izquierda sobre el hijo izquierdo de k2 
+    //       del nodo principal(k2).
+    //      *luego se rota a la derecha el nodo principal(k2) 
+    private MyAvlNode<T> leftRightRot(MyAvlNode<T> alpha) {
+        alpha.setLeft(leftRot(alpha.getLeft()));
+        return rightRot(alpha);
     }
 
-    //caso 3
-    private MyAvlNode<T> rightLeftRot(MyAvlNode<T> k2) {
-        MyAvlNode<T> k1 = k2.getRight();
-        k1 = rightRot(k1);
-        return leftRot(k2);
+    //CASO3
+    //se realiza una rotacion doble:
+    //      *rotacion a la derecha sobre el hijo derecho de k2 
+    //       del nodo principal(k2) 
+    //      *luego se rota a la izquierda el nodo principal(k2)
+    private MyAvlNode<T> rightLeftRot(MyAvlNode<T> alpha) {
+        alpha.setRight(rightRot(alpha.getRight()));
+        return leftRot(alpha);
 
     }
 
@@ -143,8 +163,8 @@ public class MyAvlTree<T extends Comparable> {
                 //aplicamos caso 2
                 node = leftRightRot(node);
             }
-        } else {
             //LADO DERECHO
+        } else {
             if (height(node.getRight()) - height(node.getLeft()) > 1) {
                 //Revisamos si es caso 3 o caso 4
                 if (height(node.getRight().getRight()) >= height(node.getRight().getLeft())) {
@@ -213,11 +233,14 @@ public class MyAvlTree<T extends Comparable> {
                 node = (node.getLeft() != null) ? node.getLeft() : node.getRight();
             }
         }
+        // despues de eliminar un elemento es necesario balancear
         return balance(node);
     }
 
     public void printinorder() {
         printinorder(this.root);
+        System.out.println("");
+        System.out.println("");
     }
 
     private void printinorder(MyAvlNode<T> node) {
@@ -230,6 +253,8 @@ public class MyAvlTree<T extends Comparable> {
 
     public void printpreorder() {
         printpreorder(this.root);
+        System.out.println("");
+        System.out.println("");
     }
 
     private void printpreorder(MyAvlNode<T> node) {
@@ -242,6 +267,8 @@ public class MyAvlTree<T extends Comparable> {
 
     public void printposorder() {
         printposorder(this.root);
+        System.out.println("");
+        System.out.println("");
     }
 
     private void printposorder(MyAvlNode<T> node) {
@@ -252,5 +279,4 @@ public class MyAvlTree<T extends Comparable> {
 
         }
     }
-
 }

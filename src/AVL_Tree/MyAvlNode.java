@@ -1,7 +1,7 @@
-
 package AVL_Tree;
 
 /**
+ *
  *
  * @author Juan Diego Medina
  */
@@ -45,6 +45,10 @@ public class MyAvlNode<T> {
 
     public void setRight(MyAvlNode<T> right) {
         this.right = right;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public int height(MyAvlNode<T> node) {

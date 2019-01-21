@@ -20,12 +20,11 @@ public interface PriorityQueue<T> {
 
     T getBack();
 
-    void print();
-
     int size();
 
     boolean isEmpty();
     
     void clear();
     
+    void print();
 }
