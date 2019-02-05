@@ -20,7 +20,7 @@ public class MinIntHeap {
 
     public MinIntHeap(int inicialcapacity) {
         this.capacity = inicialcapacity;
-        this.size = 0;
+        this.size = 1;
         this.items = new int[inicialcapacity];
     }
 
@@ -31,15 +31,15 @@ public class MinIntHeap {
     }
 
     private int getLeftChildIndex(int parentIndex) {
-        return parentIndex * 2 + 1;
+        return parentIndex * 2 ;
     }
 
     private int getRightChildIndex(int parentIndex) {
-        return parentIndex * 2 + 2;
+        return parentIndex * 2 + 1;
     }
 
     private int getParentIndex(int childIndex) {
-        return (childIndex - 1) / 2;
+        return (childIndex) / 2;
     }
 
     private int getLeftChildElement(int parentIndex) {
@@ -75,12 +75,12 @@ public class MinIntHeap {
 
     private void moveUp() {
 //       al iniciar indexTemp siempre hara referencia al ultimo elemento incluido
-        int indexTemp = size - 1;
-        while (hasParent(indexTemp) && getParentElement(indexTemp) > this.items[indexTemp]) {
-            int temp = this.items[getParentIndex(indexTemp)];
-            this.items[getParentIndex(indexTemp)] = this.items[indexTemp];
-            this.items[indexTemp] = temp;
-            indexTemp = getParentIndex(indexTemp);
+        this.items[0] = size - 1;
+        while (hasParent(this.items[0]) && getParentElement(this.items[0]) > this.items[this.items[0]]) {
+            int temp = this.items[getParentIndex(this.items[0])];
+            this.items[getParentIndex(this.items[0])] = this.items[this.items[0]];
+            this.items[this.items[0]] = temp;
+            this.items[0] = getParentIndex(this.items[0]);
         }
     }
 
