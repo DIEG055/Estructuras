@@ -7,24 +7,24 @@ import java.util.Arrays;
  * @author Juan Diego Medina
  */
 public class MinHeap<T extends Comparable> {
-    
+
     int size;
     int capacity;
     T[] items;
-    
+
     public MinHeap(int initialCapacity) {
         this.capacity = initialCapacity;
         this.items = (T[]) new Comparable[this.capacity + 1];
         this.size = 0;
     }
-    
+
     public void ensureCapacity() {
         if (this.size == this.capacity) {
             this.capacity = this.capacity * 2 + 1;
             this.items = Arrays.copyOf(this.items, this.capacity);
         }
     }
-    
+
     public void buildHeap(T[] items) {
         this.size = items.length;
         this.capacity = this.size * 2;
@@ -34,9 +34,9 @@ public class MinHeap<T extends Comparable> {
         }
         for (int i = this.size / 2; i > 0; i--) {
             percolateDown(i);
-        }       
+        }
     }
-    
+
     public void insert(T element) {
         ensureCapacity();
         int hole = this.size + 1;
@@ -48,14 +48,14 @@ public class MinHeap<T extends Comparable> {
         }
         this.items[hole] = element;
     }
-    
+
     public void deleteMin(T element) {
         this.items[0] = this.items[this.size];
         this.items[this.size] = null;
         this.size--;
         percolateDown(1);
     }
-    
+
     public void percolateDown(int pos) {
         int iterable = pos;
         this.items[0] = this.items[pos];
@@ -77,11 +77,11 @@ public class MinHeap<T extends Comparable> {
             leftComparation = this.items[iterable].compareTo(leftItem) >= 0;
         }
     }
-    
+
     private boolean hasLeftChild(int parentIndex) {
         return (parentIndex * 2) <= this.size;
     }
-    
+
     private boolean hasRightChild(int parentIndex) {
         return (parentIndex * 2 + 1) <= this.size;
     }

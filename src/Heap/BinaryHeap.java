@@ -5,94 +5,80 @@
  */
 package Heap;
 
+import java.util.Arrays;
+
 /**
  *
- * @author Juan Diego Medina
+ * @author jccas
  */
 public class BinaryHeap<T extends Comparable> {
 
-    public int size;
-    public T[] array;
+    private int size;
+    private T[] array;
 
     public BinaryHeap() {
-        this(0);
+        this.size = 0;
+        array = (T[]) new Comparable[10];
     }
 
-    public BinaryHeap(int size) {
-        this.size = size;
-        this.array = (T[]) new Comparable[this.size + 1];
+    public BinaryHeap(int initialSize) {
+        this.size = 0;
+        array = (T[]) new Comparable[initialSize];
     }
 
-    public BinaryHeap(T[] items) {
-        this.size = items.length;
-        this.array = (T[]) new Comparable[(this.size + 2) * 11 / 10];
-
-        int i = 1;
-        for (T item : items) {
-            array[i++] = item;
-        }
-        buildHeap();
-    }
-
-    private void buildHeap() {
-        for (int i = this.size / 2; i > 0; i--) {
-            percolateDown(i);
-        }
-    }
-
-    public void insert(T element) {
-        if (this.size == this.array.length - 1) {
-            enlargeArray(this.array.length * 2 + 1);
-        }
-        int hole = ++this.size;
-        for (array[0] = element; element.compareTo(array[hole / 2]) < 0; hole /= 2) {
-            array[hole] = array[hole / 2];
-        }
-        array[hole] = element;
-    }
-
-    public void enlargeArray(int newSize) {
-        T[] arrayAux = (T[]) new Comparable[newSize];
-        for (int i = 0; i < this.array.length; i++) {
-            arrayAux[i] = this.array[i];
-        }
-        this.array = arrayAux;
+    private void ensureCapacity(int newCapacity) {
+        T[] newArray = Arrays.copyOf(array, newCapacity);
+        array = newArray;
     }
 
     public boolean isEmpty() {
-        return this.size == 0;
+        return size == 0;
     }
 
-    public T findMin() {
-        return this.array[1];
+    public void insert(T item) {
+        if (size == array.length - 1) {
+            ensureCapacity(array.length * 2);
+        }
+
+        int newPosition = ++size;
+        for (array[0] = item; item.compareTo(array[newPosition / 2]) < 0; newPosition /= 2) {
+            array[newPosition] = array[newPosition / 2];
+        }
+        array[newPosition] = item;
     }
 
     public T deleteMin() {
-        if (isEmpty()) {
-            return null;
-        }
-        T minItem = findMin();
-        array[1] = array[this.size--];
+        T min = array[1];
+        array[1] = array[size--];
         percolateDown(1);
-        return minItem;
+        return min;
     }
 
-    private void percolateDown(int hole) {
-        int child = 1;
-        T tmp = array[hole];
-
-        for (; hole * 2 <= this.size; hole = child) {
-            child = hole * 2;
-            if ((child != this.size) && (array[child + 1].compareTo(array[child]) < 0)) {
+    private void percolateDown(int position) {
+        int child = 0;
+        T tmp = array[position];
+        for (; position * 2 <= size; position = child) {
+            child = position * 2;
+            if (child != size && array[child + 1].compareTo(array[child]) < 0) {
                 child++;
             }
             if (array[child].compareTo(tmp) < 0) {
-                array[hole] = array[child];
+                array[position] = array[child];
             } else {
                 break;
             }
         }
-        array[hole] = tmp;
+        array[position] = tmp;
+    }
+
+    //Implementar metodo buildHeap utilizando el algoritmo visto en clase
+    public void buildHeap(T[] items) {
+        for (int i = 0; i < items.length; i++) {
+            insert(items[i]);
+        }
+        for (int i = this.size / 2; i > 0; i--) {
+            percolateDown(i);
+        }
     }
 
 }
